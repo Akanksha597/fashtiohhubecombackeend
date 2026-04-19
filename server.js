@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const mongoose = require("mongoose");
-const app = require("../app");
+const app = require("./app");
 
 let isConnected = false;
 
