@@ -9,11 +9,7 @@ let isConnected = false;
 async function connectDB() {
   if (isConnected) return;
 
-  await mongoose.connect(process.env.CONN_STR, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
+  await mongoose.connect(process.env.CONN_STR);
   isConnected = true;
   console.log("MongoDB Connected");
 }
