@@ -129,3 +129,4 @@ dist
 .pnp.*
 uploads
 .env
+serviceAccountKey.json
