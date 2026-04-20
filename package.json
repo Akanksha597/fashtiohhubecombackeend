@@ -1,13 +1,12 @@
 {
-  "name": "Fashtion Backend",
+  "name": "fashtion-backend",
   "version": "1.0.0",
   "description": "Fashtion Backend",
   "main": "server.js",
   "scripts": {
-    "scripts": {
-      "start": "cross-env NODE_ENV=production node server.js",
-      "dev": "cross-env NODE_ENV=development nodemon server.js"
-    }
+    "start": "cross-env NODE_ENV=production node server.js",
+    "dev": "cross-env NODE_ENV=development nodemon server.js",
+    "vercel-build": "echo Build step not required"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
