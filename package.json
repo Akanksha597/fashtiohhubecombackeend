@@ -4,16 +4,16 @@
   "description": "Fashtion Backend",
   "main": "server.js",
   "scripts": {
-   "scripts": {
-  "start": "cross-env NODE_ENV=production node server.js",
-  "dev": "cross-env NODE_ENV=development nodemon server.js"
-}
+    "scripts": {
+      "start": "cross-env NODE_ENV=production node server.js",
+      "dev": "cross-env NODE_ENV=development nodemon server.js"
+    }
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-mongo-sanitize": "^2.2.0",

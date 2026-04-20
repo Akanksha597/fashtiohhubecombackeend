@@ -4,7 +4,7 @@ const Category = require("../Models/categoryModel");
 const Product = require("../Models/productModel");
 const asyncErrorHandler = require("../Utils/errorHandler");
 const CustomError = require("../Utils/customError");
-const uploadFileToFirebase = require("../Utils/firebaseUpload");
+// const uploadFileToFirebase = require("../Utils/firebaseUpload");
 
 
 // ======================================

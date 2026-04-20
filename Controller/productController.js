@@ -6,7 +6,7 @@ const path = require("path");
 const fs = require("fs");
 const mongoose = require("mongoose");
 const Order = require("../Models/orderModel");
-const uploadFileToFirebase = require("../Utils/firebaseUpload");
+
 
 exports.createProduct = asyncErrorHandler(async (req, res, next) => {
   try {

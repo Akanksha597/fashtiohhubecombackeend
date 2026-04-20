@@ -7,7 +7,7 @@ const upload = require("../Middleware/upload");
 const asyncErrorHandler = require("../Utils/errorHandler");
 const User = require("../Models/userModel");
 const sendEmail = require("../Utils/email");
-const uploadFileToFirebase = require("../Utils/firebaseUpload");
+
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.SECRET_STR, {

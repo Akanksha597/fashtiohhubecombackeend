@@ -1,6 +1,6 @@
 const GeneralSetting = require('../Models/settingModel')
 const mime = require("mime-types");
-const uploadFileToFirebase = require("../Utils/firebaseUpload");
+
 const asyncErrorHandler = require("../Utils/errorHandler");
 
 

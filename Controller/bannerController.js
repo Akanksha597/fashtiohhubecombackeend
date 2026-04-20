@@ -1,7 +1,7 @@
 const Banner = require("../Models/bannerModel");
 const CustomError = require("../Utils/customError");
 const asyncErrorHandler = require("../Utils/errorHandler");
-const uploadFileToFirebase = require("../Utils/firebaseUpload");
+
 
 // Create a new banner
 exports.createBanner = asyncErrorHandler(async (req, res, next) => {
