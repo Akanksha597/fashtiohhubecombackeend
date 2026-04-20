@@ -1,8 +1,14 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
+const express = require("express");
 const mongoose = require("mongoose");
-const app = require("./app");
+const cors = require("cors");
+
+const app = express();
+
+app.use(express.json());
+app.use(cors());
 
 let isConnected = false;
 
@@ -15,22 +21,26 @@ async function connectDB() {
 
   await mongoose.connect(process.env.CONN_STR);
   isConnected = true;
-  console.log("✅ MongoDB Connected");
+  console.log("MongoDB Connected");
 }
 
+/* Test Route */
+app.get("/api/test", (req, res) => {
+  res.json({
+    success: true,
+    message: "Backend Working"
+  });
+});
+
+/* Export for Vercel */
 module.exports = async (req, res) => {
   try {
     await connectDB();
-
-    // 🔥 THIS LINE IS THE MOST IMPORTANT
     return app(req, res);
-
   } catch (error) {
-    console.error("❌ Server Error:", error);
-
     return res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message
     });
   }
 };
