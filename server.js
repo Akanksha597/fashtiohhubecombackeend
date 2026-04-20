@@ -1,4 +1,8 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const mongoose = require("mongoose");
+const app = require("./app");
 
 let isConnected = false;
 
@@ -6,26 +10,27 @@ async function connectDB() {
   if (isConnected) return;
 
   if (!process.env.CONN_STR) {
-    throw new Error("❌ CONN_STR missing");
+    throw new Error("MongoDB URI missing");
   }
 
-  try {
-    await mongoose.connect(process.env.CONN_STR);
-    isConnected = true;
-    console.log("✅ MongoDB Connected");
-  } catch (err) {
-    console.error("❌ MongoDB ERROR:", err.message);
-    throw err;
-  }
+  await mongoose.connect(process.env.CONN_STR);
+  isConnected = true;
+  console.log("✅ MongoDB Connected");
 }
 
 module.exports = async (req, res) => {
   try {
     await connectDB();
-    return res.json({ message: "DB Connected" });
-  } catch (err) {
+
+    // ✅ IMPORTANT: pass request to Express app
+    return app(req, res);
+
+  } catch (error) {
+    console.error("❌ Server Error:", error);
+
     return res.status(500).json({
-      error: err.message,
+      success: false,
+      message: error.message,
     });
   }
 };
