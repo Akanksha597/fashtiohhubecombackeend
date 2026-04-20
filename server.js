@@ -1,3 +1,6 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const mongoose = require("mongoose");
 const app = require("./app");
 
@@ -10,11 +13,7 @@ async function connectDB() {
     throw new Error("MongoDB URI missing");
   }
 
-  await mongoose.connect(process.env.CONN_STR, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
+  await mongoose.connect(process.env.CONN_STR);
   isConnected = true;
   console.log("✅ MongoDB Connected");
 }
@@ -22,9 +21,12 @@ async function connectDB() {
 module.exports = async (req, res) => {
   try {
     await connectDB();
+
+    // 🔥 THIS LINE IS THE MOST IMPORTANT
     return app(req, res);
+
   } catch (error) {
-    console.error("❌ SERVER ERROR:", error);
+    console.error("❌ Server Error:", error);
 
     return res.status(500).json({
       success: false,

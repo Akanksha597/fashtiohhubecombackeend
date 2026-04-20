@@ -1,10 +1,7 @@
-// Controller/categoryController.js
-
 const Category = require("../Models/categoryModel");
 const Product = require("../Models/productModel");
 const asyncErrorHandler = require("../Utils/errorHandler");
 const CustomError = require("../Utils/customError");
-// const uploadFileToFirebase = require("../Utils/firebaseUpload");
 
 
 // ======================================
@@ -20,11 +17,8 @@ exports.createCategory = asyncErrorHandler(async (req, res) => {
     sortingPriorityNumber,
   } = req.body;
 
-  let thumbnail = null;
-
-  if (req.file) {
-    thumbnail = await uploadFileToFirebase(req.file);
-  }
+  // 📸 Cloudinary image
+  const thumbnail = req.file ? req.file.path : null;
 
   const category = await Category.create({
     name,
@@ -115,10 +109,11 @@ exports.getCategory = asyncErrorHandler(async (req, res, next) => {
 // UPDATE CATEGORY
 // ======================================
 exports.updateCategory = asyncErrorHandler(async (req, res, next) => {
-  let data = req.body;
+  const data = { ...req.body };
 
+  // 📸 Cloudinary image update
   if (req.file) {
-    data.thumbnail = await uploadFileToFirebase(req.file);
+    data.thumbnail = req.file.path;
   }
 
   const category = await Category.findByIdAndUpdate(

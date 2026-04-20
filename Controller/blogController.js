@@ -1,7 +1,7 @@
 const Blog = require('../Models/blogModel');
 const User = require('../Models/userModel');
 const mime = require("mime-types");
-
+const uploadFileToFirebase = require("../Utils/firebaseUpload");
 const asyncErrorHandler = require("../Utils/errorHandler");
 
 // Create a blog

@@ -2,7 +2,7 @@ const Crop = require("../Models/ruralModel");
 const asyncErrorHandler = require("../Utils/errorHandler");
 const CustomError = require("../Utils/customError");
 const mime = require("mime-types");
-
+const uploadFileToFirebase = require("../Utils/firebaseUpload");
 const path = require('path');
 const fs = require("fs");
 

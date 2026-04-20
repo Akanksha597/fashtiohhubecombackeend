@@ -1,5 +1,3 @@
-// routes/categoryRoutes.js
-
 const express = require("express");
 const router = express.Router();
 
@@ -19,11 +17,8 @@ router.get("/", categoryController.getAllCategories);
 // Get only main categories
 router.get("/main", categoryController.getMainCategories);
 
-// Get sub categories by parent id
+// Get sub categories
 router.get("/sub/:id", categoryController.getSubCategories);
-
-// Get single category
-router.get("/:id", categoryController.getCategory);
 
 
 // ======================================
@@ -46,7 +41,7 @@ router.get(
   categoryController.getCategorySales
 );
 
-// Add category / subcategory
+// Add category
 router.post(
   "/addCategory",
   protect,
@@ -71,5 +66,13 @@ router.delete(
   restrict("admin", "superAdmin"),
   categoryController.deleteCategory
 );
+
+
+// ======================================
+// ⚠️ KEEP THIS LAST
+// ======================================
+
+// Get single category (must be last)
+router.get("/:id", categoryController.getCategory);
 
 module.exports = router;

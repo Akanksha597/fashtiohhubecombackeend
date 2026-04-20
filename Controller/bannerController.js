@@ -3,17 +3,17 @@ const CustomError = require("../Utils/customError");
 const asyncErrorHandler = require("../Utils/errorHandler");
 
 
-// Create a new banner
+// ==========================
+// 🚀 CREATE BANNER
+// ==========================
 exports.createBanner = asyncErrorHandler(async (req, res, next) => {
-  let getImageUrl;
-  if (req.file) {
-    getImageUrl = await uploadFileToFirebase(req.file);
-  }
 
-  // Include redirectLink from the request body
+  // 📸 Cloudinary image
+  const imageUrl = req.file ? req.file.path : null;
+
   const newBanner = await Banner.create({
     ...req.body,
-    bannerImage: getImageUrl ? getImageUrl : null,
+    bannerImage: imageUrl,
   });
 
   res.status(201).json({
@@ -24,63 +24,64 @@ exports.createBanner = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
-// Get all banners with pagination or fetch by PageWiseBanner (pageType)
+
+// ==========================
+// 📦 GET ALL BANNERS
+// ==========================
 exports.getAllBanners = asyncErrorHandler(async (req, res, next) => {
   const { page, limit, fetchAll, search, pageType } = req.query;
 
-  // Create a search query
   const searchQuery = {};
 
-  // Filter by pageType (PageWiseBanner)
+  // Filter by page type
   if (pageType) {
-    searchQuery.PageWiseBanner = pageType;  // PageWiseBanner is the field we use to filter banners by page type
+    searchQuery.PageWiseBanner = pageType;
   }
 
+  // Search filter
   if (search) {
     searchQuery.$or = [
-      { bannerImage: { $regex: search, $options: "i" } },
       { bannerType: { $regex: search, $options: "i" } },
       { title: { $regex: search, $options: "i" } },
       { bannerText: { $regex: search, $options: "i" } },
       { PageWiseBanner: { $regex: search, $options: "i" } },
-      { redirectLink: { $regex: search, $options: "i" } },  // Allow searching by redirectLink
+      { redirectLink: { $regex: search, $options: "i" } },
     ];
   }
 
+  // Fetch all
   if (fetchAll === "true") {
     const banners = await Banner.find(searchQuery);
     return res.status(200).json({
       status: "success",
       results: banners.length,
-      data: {
-        banners,
-      },
+      data: { banners },
     });
   }
 
+  // Pagination
   const skip = page ? (page - 1) * limit : 0;
-  const bannerQuery = Banner.find(searchQuery);
 
-  if (page && limit) {
-    bannerQuery.skip(skip).limit(parseInt(limit));
-  }
+  const banners = await Banner.find(searchQuery)
+    .skip(skip)
+    .limit(limit ? Number(limit) : 0);
 
-  const banners = await bannerQuery;
   const total = await Banner.countDocuments(searchQuery);
 
   res.status(200).json({
     status: "success",
     results: banners.length,
     total,
-    currentPage: page ? parseInt(page) : null,
+    currentPage: page ? Number(page) : null,
     totalPages: page && limit ? Math.ceil(total / limit) : null,
-    data: {
-      banners,
-    },
+    data: { banners },
   });
 });
 
-// Get a single banner
+
+// ==========================
+// 📦 GET SINGLE BANNER
+// ==========================
 exports.getBanner = asyncErrorHandler(async (req, res, next) => {
   const banner = await Banner.findById(req.params.id);
 
@@ -90,17 +91,25 @@ exports.getBanner = asyncErrorHandler(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    data: {
-      banner,
-    },
+    data: { banner },
   });
 });
 
-// Update a banner
+
+// ==========================
+// 🔄 UPDATE BANNER
+// ==========================
 exports.updateBanner = asyncErrorHandler(async (req, res, next) => {
+  const data = { ...req.body };
+
+  // 📸 Update image if provided
+  if (req.file) {
+    data.bannerImage = req.file.path;
+  }
+
   const updatedBanner = await Banner.findByIdAndUpdate(
     req.params.id,
-    req.body, // Include the redirectLink if it's in the request body
+    data,
     {
       new: true,
       runValidators: true,
@@ -119,7 +128,10 @@ exports.updateBanner = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
-// Delete a banner
+
+// ==========================
+// ❌ DELETE BANNER
+// ==========================
 exports.deleteBanner = asyncErrorHandler(async (req, res, next) => {
   const banner = await Banner.findByIdAndDelete(req.params.id);
 
@@ -129,6 +141,6 @@ exports.deleteBanner = asyncErrorHandler(async (req, res, next) => {
 
   res.status(204).json({
     status: "success",
-    data: banner,
+    data: null,
   });
 });
