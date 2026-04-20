@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
   try {
     await connectDB();
 
-    // ✅ IMPORTANT: pass request to Express app
+    // 🔥 THIS LINE IS THE MOST IMPORTANT
     return app(req, res);
 
   } catch (error) {
