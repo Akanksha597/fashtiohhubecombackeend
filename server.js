@@ -1,8 +1,4 @@
-const dotenv = require("dotenv");
-dotenv.config();
-
 const mongoose = require("mongoose");
-const app = require("./app");
 
 let isConnected = false;
 
@@ -10,28 +6,26 @@ async function connectDB() {
   if (isConnected) return;
 
   if (!process.env.CONN_STR) {
-    throw new Error("Missing CONN_STR in environment variables");
+    throw new Error("❌ CONN_STR missing");
   }
 
-  await mongoose.connect(process.env.CONN_STR, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
-  isConnected = true;
-  console.log("MongoDB Connected");
+  try {
+    await mongoose.connect(process.env.CONN_STR);
+    isConnected = true;
+    console.log("✅ MongoDB Connected");
+  } catch (err) {
+    console.error("❌ MongoDB ERROR:", err.message);
+    throw err;
+  }
 }
 
 module.exports = async (req, res) => {
   try {
     await connectDB();
-    return app(req, res);
-  } catch (error) {
-    console.error("SERVER ERROR:", error);
-
+    return res.json({ message: "DB Connected" });
+  } catch (err) {
     return res.status(500).json({
-      success: false,
-      message: error.message,
+      error: err.message,
     });
   }
 };
